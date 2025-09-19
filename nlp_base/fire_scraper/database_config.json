@@ -1,0 +1,16 @@
+{
+  "mysql": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "",
+    "database": "fire_data",
+    "charset": "utf8mb4"
+  },
+  "connection_pool": {
+    "min_connections": 1,
+    "max_connections": 10,
+    "connection_timeout": 30
+  }
+}
+
