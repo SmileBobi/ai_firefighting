@@ -1,3 +1,0 @@
-﻿stock_code,stock_name,date,reason,reason_detail,buy_amount,sell_amount,net_amount,buy_seats,sell_seats,turnover_rate,price_limit,scraped_at,source_url
-300750,宁德时代,2025-09-17,日涨幅偏离值达7%的证券,连续三个交易日内收盘价涨幅偏离值累计达到20%,125000000,98000000,27000000,"机构专用,深股通专用,机构专用","机构专用,深股通专用",2.5,8.5,2025-09-17 09:34:00,https://httpbin.org/json
-002594,比亚迪,2025-09-17,日换手率达到20%的证券,当日换手率达到20%,89000000,112000000,-23000000,"深股通专用,机构专用","机构专用,深股通专用,机构专用",22.3,5.2,2025-09-17 09:34:00,https://httpbin.org/json

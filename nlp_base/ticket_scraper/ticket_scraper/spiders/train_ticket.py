@@ -23,7 +23,8 @@ class TrainTicketSpider(scrapy.Spider):
     
     def build_query_url(self):
         """构建查询URL"""
-        base_url = "https://kyfw.12306.cn/otn/leftTicket/query"
+        # 使用新的API接口
+        base_url = "https://kyfw.12306.cn/otn/leftTicket/queryZ"
         params = {
             'leftTicketDTO.train_date': self.date,
             'leftTicketDTO.from_station': self.from_station,
@@ -39,12 +40,18 @@ class TrainTicketSpider(scrapy.Spider):
                 url=url,
                 callback=self.parse,
                 headers={
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                    'Referer': 'https://kyfw.12306.cn/otn/leftTicket/init',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Referer': 'https://www.12306.cn/index/',
                     'Accept': 'application/json, text/javascript, */*; q=0.01',
                     'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Connection': 'keep-alive',
+                    'Sec-Fetch-Dest': 'empty',
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'same-origin',
                     'X-Requested-With': 'XMLHttpRequest'
-                }
+                },
+                meta={'dont_redirect': True}
             )
     
     def parse(self, response):
@@ -143,7 +150,7 @@ class TrainTicketSpider(scrapy.Spider):
             
             # 爬取信息
             item['scraped_at'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            item['source_url'] = response.url
+            item['source_url'] = self.start_urls[0] if self.start_urls else ''
             
             return item
             

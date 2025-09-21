@@ -15,9 +15,7 @@ ticket_scraper/
 │   └── spiders/
 │       ├── __init__.py
 │       └── train_ticket.py  # 火车票爬虫
-├── demo_spider.py        # 演示爬虫
 ├── run_scraper.py        # 运行脚本
-├── run_demo.py          # 演示运行脚本
 ├── scrapy.cfg           # Scrapy配置文件
 └── README.md            # 说明文档
 ```

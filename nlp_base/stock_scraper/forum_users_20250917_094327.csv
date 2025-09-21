@@ -1,4 +1,0 @@
-﻿user_id,username,nickname,level,join_time,last_active,post_count,comment_count,follower_count,following_count,total_likes,user_tags,expertise_areas,investment_style,activity_score,influence_score,scraped_at,source_url
-10001,股海小散,小散,LV5,2023-01-15,2025-09-17 14:30:00,156,892,234,89,1234,"['技术分析', '短线交易']","['银行股', '科技股']",价值投资,85,72,2025-09-17 09:43:28,https://httpbin.org/json
-10002,韭菜一枚,韭菜,LV3,2024-03-20,2025-09-17 14:25:00,45,234,67,123,456,"['新手', '学习']",['房地产'],跟风投资,65,45,2025-09-17 09:43:28,https://httpbin.org/json
-10003,技术分析师,分析师,LV8,2022-06-10,2025-09-17 14:20:00,289,1456,567,234,3456,"['技术分析', '专业']","['技术分析', '银行股']",技术分析,95,88,2025-09-17 09:43:28,https://httpbin.org/json

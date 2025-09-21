@@ -1,6 +1,0 @@
-﻿comment_id,post_id,content,author_name,author_level,publish_time,like_count,parent_comment_id,comment_level,sentiment_score,sentiment_label,emotion_keywords,content_length,has_images,scraped_at,source_url
-1001,123456,我也看好平安银行，基本面不错，技术面也突破了,股友A,LV4,2025-09-17 14:35:00,5,,1,0.1,neutral,"['突破', '看好']",22,False,2025-09-17 09:43:28,https://httpbin.org/json
-1002,123456,但是要注意风险，银行股波动比较大,风险控制,LV5,2025-09-17 14:36:00,3,1001,2,-0.067,neutral,['风险'],16,False,2025-09-17 09:43:28,https://httpbin.org/json
-1003,123457,房地产政策确实收紧，建议减仓,政策分析师,LV6,2025-09-17 14:30:00,8,,1,0.0,neutral,[],14,False,2025-09-17 09:43:28,https://httpbin.org/json
-1004,123458,技术分析很专业，学习了,新手小白,LV2,2025-09-17 14:25:00,2,,1,0.0,neutral,[],11,False,2025-09-17 09:43:28,https://httpbin.org/json
-1005,123459,同意，危机中往往孕育着机会,老股民,LV9,2025-09-17 14:20:00,12,,1,0.0,neutral,"['危机', '机会']",13,False,2025-09-17 09:43:28,https://httpbin.org/json
