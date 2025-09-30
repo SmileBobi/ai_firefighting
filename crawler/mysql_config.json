@@ -1,0 +1,22 @@
+{
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "your_password_here",
+    "database": "firefighting_db",
+    "charset": "utf8mb4"
+  },
+  "table": {
+    "name": "fire_119_articles",
+    "batch_size": 100,
+    "create_indexes": true
+  },
+  "data": {
+    "json_file": "data/fire_119_scrapy.json",
+    "encoding": "utf-8"
+  }
+}
+
+
+

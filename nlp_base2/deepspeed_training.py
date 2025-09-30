@@ -7,6 +7,9 @@ import os
 import time
 import json
 import torch
+
+# 设置环境变量消除 tokenizers 警告
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
@@ -213,12 +216,23 @@ class DeepSpeedTrainer:
         )
         
         # 初始化DeepSpeed
-        model_engine, optimizer, dataloader, lr_scheduler = deepspeed.initialize(
+        model_engine, optimizer, returned_dataloader, lr_scheduler = deepspeed.initialize(
             model=self.model,
             optimizer=self.optimizer,
             lr_scheduler=self.lr_scheduler,
             config=self.deepspeed_config
         )
+        
+        # 更新优化器和学习率调度器引用
+        self.optimizer = optimizer
+        self.lr_scheduler = lr_scheduler
+        
+        # 关键修复：如果返回的dataloader为None，使用原始的dataloader
+        if returned_dataloader is None:
+            logger.info("DeepSpeed返回的dataloader为None，使用原始dataloader")
+            working_dataloader = dataloader
+        else:
+            working_dataloader = returned_dataloader
         
         # 训练循环
         logger.info("开始DeepSpeed训练...")
@@ -231,8 +245,8 @@ class DeepSpeedTrainer:
             epoch_loss = 0
             num_batches = 0
             
-            for batch_idx, batch in enumerate(dataloader):
-                # 移动数据到设备
+            for batch_idx, batch in enumerate(working_dataloader):
+                # 需要手动将数据移动到正确的设备
                 input_ids = batch['input_ids'].to(device)
                 attention_mask = batch['attention_mask'].to(device)
                 labels = batch['labels'].to(device)

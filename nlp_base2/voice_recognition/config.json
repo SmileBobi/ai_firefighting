@@ -1,0 +1,83 @@
+{
+  "iflytek": {
+    "app_id": "your_app_id_here",
+    "api_key": "your_api_key_here",
+    "api_secret": "your_api_secret_here",
+    "base_url": "https://api.xfyun.cn/v1/service/v1/iat",
+    "timeout": 30
+  },
+  "audio": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "format": "wav",
+    "duration": 5,
+    "chunk_size": 1024
+  },
+  "recognition": {
+    "online": {
+      "enabled": true,
+      "language": "zh_cn",
+      "accent": "mandarin",
+      "domain": "iat",
+      "language_type": "chinese"
+    },
+    "offline": {
+      "enabled": true,
+      "model_path": "./models/offline_model",
+      "language": "zh_cn"
+    }
+  },
+  "firefighting": {
+    "emergency_keywords": [
+      "火警", "火灾", "起火", "燃烧", "烟雾", "报警",
+      "紧急", "危险", "严重", "爆炸", "泄漏", "中毒"
+    ],
+    "rescue_keywords": [
+      "救援", "救人", "被困", "疏散", "逃生", "安全",
+      "帮助", "救命", "紧急救援", "人员疏散"
+    ],
+    "equipment_keywords": [
+      "水枪", "泡沫", "梯子", "呼吸器", "水带", "泵浦",
+      "照明", "通讯", "设备", "器材"
+    ],
+    "location_keywords": [
+      "一楼", "二楼", "三楼", "四楼", "五楼",
+      "地下室", "大厅", "走廊", "楼梯间", "机房",
+      "东", "西", "南", "北", "前门", "后门"
+    ],
+    "urgency_levels": {
+      "low": 1,
+      "normal": 2,
+      "high": 3,
+      "critical": 4
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "./logs/voice_recognition.log",
+    "max_size": "10MB",
+    "backup_count": 5
+  },
+  "database": {
+    "type": "sqlite",
+    "path": "./data/voice_recognition.db",
+    "tables": {
+      "recognition_results": "recognition_results",
+      "firefighting_commands": "firefighting_commands",
+      "emergency_events": "emergency_events"
+    }
+  },
+  "web": {
+    "host": "0.0.0.0",
+    "port": 8080,
+    "debug": false,
+    "cors": {
+      "enabled": true,
+      "origins": ["*"]
+    }
+  }
+}
+
+
+

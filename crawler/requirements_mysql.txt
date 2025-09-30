@@ -1,0 +1,15 @@
+# MySQL数据导入依赖包
+
+# 核心依赖
+mysql-connector-python>=8.0.0
+pymysql>=1.0.0
+
+# 数据处理
+pandas>=1.5.0
+numpy>=1.21.0
+
+# 其他工具
+python-dotenv>=0.19.0
+
+
+

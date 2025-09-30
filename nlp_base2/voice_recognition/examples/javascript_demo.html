@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科大讯飞语音识别演示 - 消防项目</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #d32f2f;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .demo-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        
+        .demo-section h3 {
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+        .btn {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #1565c0;
+        }
+        
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .btn-danger {
+            background-color: #d32f2f;
+        }
+        
+        .btn-danger:hover {
+            background-color: #b71c1c;
+        }
+        
+        .btn-success {
+            background-color: #388e3c;
+        }
+        
+        .btn-success:hover {
+            background-color: #2e7d32;
+        }
+        
+        .btn-warning {
+            background-color: #f57c00;
+        }
+        
+        .btn-warning:hover {
+            background-color: #ef6c00;
+        }
+        
+        .result-area {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #1976d2;
+        }
+        
+        .result-text {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .confidence {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .firefighting-analysis {
+            background-color: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        
+        .urgent {
+            background-color: #ffebee;
+            border-left-color: #f44336;
+            color: #c62828;
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .status.recording {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .status.processing {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .status.success {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .status.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .demo-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .demo-results {
+            margin: 20px 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1976d2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 科大讯飞语音识别演示 - 消防项目</h1>
+        
+        <!-- 基本识别演示 -->
+        <div class="demo-section">
+            <h3>🎤 基本语音识别</h3>
+            <div class="demo-controls">
+                <button id="record-btn" class="btn">录制并识别</button>
+                <button id="online-btn" class="btn btn-success">在线识别</button>
+                <button id="offline-btn" class="btn btn-warning">离线识别</button>
+            </div>
+            <div class="demo-results">
+                <div id="basic-results" class="result-area hidden">
+                    <div class="result-text" id="basic-text"></div>
+                    <div class="confidence" id="basic-confidence"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 实时识别演示 -->
+        <div class="demo-section">
+            <h3>🔄 实时语音识别</h3>
+            <div class="demo-controls">
+                <button id="realtime-btn" class="btn">开始实时识别</button>
+                <button id="stop-btn" class="btn btn-danger hidden">停止识别</button>
+            </div>
+            <div class="demo-results">
+                <div id="realtime-results" class="result-area hidden">
+                    <div class="result-text" id="realtime-text"></div>
+                    <div class="confidence" id="realtime-confidence"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 消防命令识别演示 -->
+        <div class="demo-section">
+            <h3>🔥 消防命令识别</h3>
+            <div class="demo-controls">
+                <button id="firefighting-btn" class="btn">识别消防命令</button>
+                <input type="text" id="command-input" placeholder="输入消防命令或录制语音" style="width: 300px; padding: 8px; margin: 5px;">
+            </div>
+            <div class="demo-results">
+                <div id="firefighting-results" class="result-area hidden">
+                    <div class="result-text" id="firefighting-text"></div>
+                    <div id="firefighting-analysis" class="firefighting-analysis hidden">
+                        <h4>消防分析结果:</h4>
+                        <div id="analysis-details"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 状态显示 -->
+        <div id="status" class="status hidden"></div>
+    </div>
+
+    <!-- 引入科大讯飞SDK -->
+    <script src="https://cdn.iflytek.com/sdk/iflytek-voice-sdk.js"></script>
+    
+    <!-- 引入语音识别类 -->
+    <script src="../iflytek_voice_recognition.js"></script>
+    
+    <script>
+        // 科大讯飞配置（需要替换为实际配置）
+        const config = {
+            appId: 'your_app_id_here',
+            apiKey: 'your_api_key_here',
+            apiSecret: 'your_api_secret_here'
+        };
+        
+        // 初始化识别器
+        let recognizer = null;
+        let isInitialized = false;
+        
+        // 初始化演示
+        async function initializeDemo() {
+            try {
+                recognizer = new FirefightingVoiceRecognition(
+                    config.appId, config.apiKey, config.apiSecret
+                );
+                
+                isInitialized = await recognizer.initializeRecognizers();
+                
+                if (isInitialized) {
+                    showStatus('✅ 语音识别器初始化成功', 'success');
+                    bindEvents();
+                } else {
+                    showStatus('❌ 识别器初始化失败，请检查配置', 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ 初始化错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // 绑定事件
+        function bindEvents() {
+            document.getElementById('record-btn').addEventListener('click', recordAndRecognize);
+            document.getElementById('online-btn').addEventListener('click', onlineRecognition);
+            document.getElementById('offline-btn').addEventListener('click', offlineRecognition);
+            document.getElementById('realtime-btn').addEventListener('click', startRealTimeRecognition);
+            document.getElementById('stop-btn').addEventListener('click', stopRealTimeRecognition);
+            document.getElementById('firefighting-btn').addEventListener('click', processFirefightingCommand);
+        }
+        
+        // 录制并识别
+        async function recordAndRecognize() {
+            if (!isInitialized) {
+                showStatus('❌ 识别器未初始化', 'error');
+                return;
+            }
+            
+            try {
+                showStatus('🎤 开始录制音频（5秒）...', 'recording');
+                const audioBlob = await recognizer.recordAudio(5);
+                
+                showStatus('🔄 进行在线识别...', 'processing');
+                const result = await recognizer.onlineRecognition(audioBlob);
+                
+                displayBasicResults(result);
+                showStatus('✅ 识别完成', 'success');
+            } catch (error) {
+                showStatus(`❌ 错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // 在线识别
+        async function onlineRecognition() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'audio/*';
+            fileInput.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    try {
+                        showStatus('🔄 进行在线识别...', 'processing');
+                        const result = await recognizer.onlineRecognition(file);
+                        displayBasicResults(result);
+                        showStatus('✅ 识别完成', 'success');
+                    } catch (error) {
+                        showStatus(`❌ 错误: ${error.message}`, 'error');
+                    }
+                }
+            };
+            fileInput.click();
+        }
+        
+        // 离线识别
+        async function offlineRecognition() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'audio/*';
+            fileInput.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    try {
+                        showStatus('🔄 进行离线识别...', 'processing');
+                        const result = await recognizer.offlineRecognition(file);
+                        displayBasicResults(result);
+                        showStatus('✅ 识别完成', 'success');
+                    } catch (error) {
+                        showStatus(`❌ 错误: ${error.message}`, 'error');
+                    }
+                }
+            };
+            fileInput.click();
+        }
+        
+        // 开始实时识别
+        async function startRealTimeRecognition() {
+            if (!isInitialized) {
+                showStatus('❌ 识别器未初始化', 'error');
+                return;
+            }
+            
+            document.getElementById('realtime-btn').style.display = 'none';
+            document.getElementById('stop-btn').classList.remove('hidden');
+            
+            showStatus('🔄 开始实时语音识别（10秒）... 请说话...', 'recording');
+            
+            const callback = (result) => {
+                displayRealtimeResults(result);
+                if (result.firefightingAnalysis && result.firefightingAnalysis.actionRequired) {
+                    showStatus('🚨 检测到紧急情况，需要立即行动！', 'error');
+                }
+            };
+            
+            await recognizer.realTimeRecognition(callback, 10);
+            stopRealTimeRecognition();
+        }
+        
+        // 停止实时识别
+        function stopRealTimeRecognition() {
+            recognizer.stopRealTimeRecognition();
+            document.getElementById('realtime-btn').style.display = 'inline-block';
+            document.getElementById('stop-btn').classList.add('hidden');
+            showStatus('⏹️ 实时识别已停止', 'success');
+        }
+        
+        // 处理消防命令
+        async function processFirefightingCommand() {
+            const commandInput = document.getElementById('command-input');
+            const command = commandInput.value.trim();
+            
+            if (!command) {
+                showStatus('❌ 请输入消防命令', 'error');
+                return;
+            }
+            
+            try {
+                showStatus('🔄 处理消防命令...', 'processing');
+                
+                // 模拟消防命令处理（实际应用中需要调用相应的处理函数）
+                const result = {
+                    text: command,
+                    confidence: 0.95,
+                    firefightingAnalysis: {
+                        categories: ['火警', '救援'],
+                        keywords: ['火情', '救援'],
+                        urgencyLevel: 'high',
+                        actionRequired: true
+                    }
+                };
+                
+                displayFirefightingResults(result);
+                showStatus('✅ 消防命令处理完成', 'success');
+            } catch (error) {
+                showStatus(`❌ 错误: ${error.message}`, 'error');
+            }
+        }
+        
+        // 显示基本识别结果
+        function displayBasicResults(result) {
+            const resultsDiv = document.getElementById('basic-results');
+            const textDiv = document.getElementById('basic-text');
+            const confidenceDiv = document.getElementById('basic-confidence');
+            
+            textDiv.textContent = result.text || '无识别结果';
+            confidenceDiv.textContent = `置信度: ${(result.confidence * 100).toFixed(1)}%`;
+            
+            resultsDiv.classList.remove('hidden');
+        }
+        
+        // 显示实时识别结果
+        function displayRealtimeResults(result) {
+            const resultsDiv = document.getElementById('realtime-results');
+            const textDiv = document.getElementById('realtime-text');
+            const confidenceDiv = document.getElementById('realtime-confidence');
+            
+            textDiv.textContent = result.text || '无识别结果';
+            confidenceDiv.textContent = `置信度: ${(result.confidence * 100).toFixed(1)}%`;
+            
+            resultsDiv.classList.remove('hidden');
+        }
+        
+        // 显示消防识别结果
+        function displayFirefightingResults(result) {
+            const resultsDiv = document.getElementById('firefighting-results');
+            const textDiv = document.getElementById('firefighting-text');
+            const analysisDiv = document.getElementById('firefighting-analysis');
+            const detailsDiv = document.getElementById('analysis-details');
+            
+            textDiv.textContent = result.text || '无识别结果';
+            
+            if (result.firefightingAnalysis) {
+                const analysis = result.firefightingAnalysis;
+                detailsDiv.innerHTML = `
+                    <p><strong>类别:</strong> ${analysis.categories.join(', ') || '无'}</p>
+                    <p><strong>关键词:</strong> ${analysis.keywords.join(', ') || '无'}</p>
+                    <p><strong>紧急程度:</strong> ${analysis.urgencyLevel}</p>
+                    <p><strong>需要行动:</strong> ${analysis.actionRequired ? '是' : '否'}</p>
+                `;
+                analysisDiv.classList.remove('hidden');
+            }
+            
+            resultsDiv.classList.remove('hidden');
+        }
+        
+        // 显示状态
+        function showStatus(message, type = '') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.classList.remove('hidden');
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initializeDemo);
+    </script>
+</body>
+</html>
+
+
+
